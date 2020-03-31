@@ -156,9 +156,32 @@ import { configService } from './config/config.service';
 
 And now we will change the `imports` to the following:
 ```typescript
+import { configService } from './config.service'; import { TypeOrmModule } from '@nestjs/typeorm'; 
 imports: [TypeOrmModule.forRoot(configService.getTypeOrmConfig())]
 ```
 
 ### Defining our Entities
+When defining our data structure, we will always want to define a primary key.  Since our primary key is on every entity, we will define a base entity so that it can be extended on all of our entities.
 
- 
+`base.entity.ts`
+```typescript
+import { PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm'
+
+export abstract class BaseEntity {
+  @PrimaryGeneratedColumn('uuid')
+  id: string
+  
+  @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date
+  
+  @UpdateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP '})
+  updatedAt: Date
+}
+```
+
+Let's talk about the `@PrimaryGeneratedColumn`, `@CreatedDateColumn`, `@UpdateDateColumn` decorators.
+
+Decorators are just a wrapper around a function.  If you have heard of this before, it is that you have.  Decorators are a fancy way to say Higher Order Function. Here is a good [article](https://www.telerik.com/blogs/decorators-in-javascript) if you want to read up on decorators.
+
+TypeORM comes with many [decorators](https://github.com/typeorm/typeorm/blob/master/docs/decorator-reference.md).  They are used to define how the database schema is.
+
