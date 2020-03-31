@@ -32,22 +32,22 @@ class ConfigService {
 
   public getTypeOrmConfig(): TypeOrmModuleOptions {
     return {
-      type: 'sqlite',
-      database: 'quotes.db3',
-      synchronize: true,
-      logging: false,
+      type: 'postgres',
+      host: this.getValue('DB_HOST'),
+      port: parseInt(this.getValue('DB_PORT')),
+      username: this.getValue('DB_USER'),
+      password: this.getValue('DB_PASS'),
+      database: this.getValue('DB_NAME'),
 
-      entities: ['src/entity/**/*.ts'],
+      entities: ['**/*.entity{.ts,.js}'],
+      migrationsTableName: 'migration',
 
-      migrations: ['src/migration/**/*.ts'],
-
-      subscribers: ['src/subscriber/**/*.ts'],
+      migrations: ['src/migration/*.ts'],
 
       cli: {
-        entitiesDir: 'src/entity',
         migrationsDir: 'src/migration',
-        subscribersDir: 'src/subscriber',
       },
+      ssl: this.isProduction(),
     };
   }
 }
@@ -55,4 +55,9 @@ class ConfigService {
 export const configService = new ConfigService(process.env).ensureValues([
   'JWT_SECRET',
   'PORT',
+  'DB_HOST',
+  'DB_PORT',
+  'DB_NAME',
+  'DB_USER',
+  'DB_PASS',
 ]);
