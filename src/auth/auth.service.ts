@@ -8,14 +8,18 @@ import { plainToClass } from 'class-transformer';
 
 @Injectable()
 export class AuthService {
-  constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
+  constructor(
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
+  ) {}
 
-  public async create(dto: UserDTO) : Promise<UserDTO> {
-    return await this.userRepository.save(dto.toEntity()).then(user => UserDTO.fromEntity(user))
+  public async create(dto: UserDTO): Promise<UserDTO> {
+    return await this.userRepository
+      .save(dto.toEntity())
+      .then(user => UserDTO.fromEntity(user));
   }
 
   public async login(dto: AuthDTO): Promise<AuthDTO> {
-    const user = plainToClass(User, dto)
-    return AuthDTO.fromEntity(user, 'Random Token')
+    const user = plainToClass(User, dto);
+    return AuthDTO.fromEntity(user, 'Random Token');
   }
 }

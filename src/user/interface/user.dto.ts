@@ -4,29 +4,29 @@ import { User } from '../../models/user.entity';
 
 export class UserDTO implements Readonly<UserDTO> {
   @ApiHideProperty()
-  id: string
+  id: string;
 
-  @ApiProperty({required: true})
+  @ApiProperty({ required: true })
   @IsEmail()
-  email: string
+  email: string;
 
-  @ApiProperty({required: true})
+  @ApiProperty({ required: true })
   @Length(8, 100)
-  password: string
+  password: string;
 
   @ApiHideProperty()
-  createdAt: Date
+  createdAt: Date;
 
   @ApiHideProperty()
-  updatedAt: Date
+  updatedAt: Date;
 
   public static from(dto: Partial<UserDTO>) {
-    const user = new UserDTO()
-    user.id = dto.id
-    user.email = dto.email
-    user.createdAt = dto.createdAt
-    user.updatedAt = dto.updatedAt
-    return user
+    const user = new UserDTO();
+    user.id = dto.id;
+    user.email = dto.email;
+    user.createdAt = dto.createdAt;
+    user.updatedAt = dto.updatedAt;
+    return user;
   }
 
   public static fromEntity(entity: User) {
@@ -34,19 +34,18 @@ export class UserDTO implements Readonly<UserDTO> {
       id: entity.id,
       email: entity.email,
       createdAt: entity.createdAt,
-      updatedAt: entity.updatedAt
-    })
+      updatedAt: entity.updatedAt,
+    });
   }
 
   public toEntity() {
-    const newUser = new User()
-    newUser.id = this.id
-    newUser.email = this.email
-    newUser.password = this.password
-    newUser.hashPassword()
-    newUser.createdAt = this.createdAt
-    newUser.updatedAt = this.updatedAt
-    return newUser
+    const newUser = new User();
+    newUser.id = this.id;
+    newUser.email = this.email;
+    newUser.password = this.password;
+    newUser.hashPassword();
+    newUser.createdAt = this.createdAt;
+    newUser.updatedAt = this.updatedAt;
+    return newUser;
   }
-
 }

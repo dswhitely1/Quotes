@@ -11,12 +11,12 @@ export class AuthController {
 
   @Post('register')
   public register(@Body() dto: UserDTO): Promise<UserDTO> {
-    return this.authService.create(dto)
+    return this.authService.create(dto);
   }
 
   @Post('login')
   @HttpCode(200)
   public login(@Body() dto: AuthDTO): Promise<AuthDTO> {
-    return this.authService.login(dto)
+    return this.authService.login(dto);
   }
 }
