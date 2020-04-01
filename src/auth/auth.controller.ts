@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   HttpCode,
-  HttpStatus,
   Post,
   Request,
   UseGuards,
@@ -26,8 +25,7 @@ export class AuthController {
   @UseGuards(AuthGuard('local'))
   @Post('login')
   @HttpCode(200)
-  public login(@Request() req, @Body() dto: UserDTO): Promise<AuthDTO> {
-    console.log(req.user);
+  public login(@Request() req): Promise<AuthDTO> {
     return this.authService.login(req.user);
   }
 }
