@@ -10,7 +10,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { UserDTO } from '../user/interface/user.dto';
 import { AuthDTO } from './interface/auth.dto';
-import { AuthGuard } from '@nestjs/passport';
+import { LocalAuthGuard } from './local-auth.guard';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -22,7 +22,7 @@ export class AuthController {
     return this.authService.create(dto);
   }
 
-  @UseGuards(AuthGuard('local'))
+  @UseGuards(LocalAuthGuard)
   @Post('login')
   @HttpCode(200)
   public login(@Request() req): Promise<AuthDTO> {

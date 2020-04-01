@@ -5,11 +5,13 @@ import { User } from '../models/user.entity';
 import { UserDTO } from '../user/interface/user.dto';
 import { AuthDTO } from './interface/auth.dto';
 import { plainToClass } from 'class-transformer';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
+    private readonly jwtService: JwtService,
   ) {}
 
   public async create(dto: UserDTO): Promise<UserDTO> {
@@ -18,9 +20,11 @@ export class AuthService {
       .then(user => UserDTO.fromEntity(user));
   }
 
-  public async login(dto: AuthDTO): Promise<AuthDTO> {
+  public async login(dto: UserDTO): Promise<AuthDTO> {
     const user = plainToClass(User, dto);
-    return AuthDTO.fromEntity(user, 'Random Token');
+    const { id, ...rest } = dto;
+    const payload = { sub: id, ...rest };
+    return AuthDTO.fromEntity(user, this.jwtService.sign(payload));
   }
 
   async validateUser(username: string, pass: string): Promise<UserDTO> {
