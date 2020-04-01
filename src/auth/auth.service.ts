@@ -22,4 +22,12 @@ export class AuthService {
     const user = plainToClass(User, dto);
     return AuthDTO.fromEntity(user, 'Random Token');
   }
+
+  async validateUser(username: string, pass: string): Promise<UserDTO> {
+    const user = await this.userRepository.findOne({ where: { username } });
+    if (user && user.checkPassword(pass)) {
+      return UserDTO.fromEntity(user);
+    }
+    return null;
+  }
 }
